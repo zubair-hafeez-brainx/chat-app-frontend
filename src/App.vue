@@ -1,18 +1,31 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Index/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Index from "./components";
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  components: {Index},
+  // computed: {
+  //   currentUser() {
+  //     return this.$store.state.currentUser;
+  //   },
+  //   activatedUser() {
+  //     return this.$store.state.activatedUser;
+  //   },
+  // },
+  // mounted() {
+  //   window.Echo.channel('user_'+this.currentUser.id)
+  //       .listen('MessageCreated', (data) => {
+  //         if (this.activatedUser.id === data.data.from) {
+  //           this.$store.state.users.userChat.push(data.data);
+  //         }
+  //       });
+  // }
 }
 </script>
 
@@ -23,6 +36,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
