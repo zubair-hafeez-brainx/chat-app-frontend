@@ -8,6 +8,7 @@ export default {
     namespaced: true,
     state: {
         friends: [],
+        groups: [],
         userChat: [],
         searchedUsers: [],
     },
@@ -25,6 +26,19 @@ export default {
             });
             return commit('set', resp);
         },
+        async retrieveGroups({commit}) {
+            const resp = await axios({
+                url: 'http://chat-app.test/api/message/groups',
+                method: 'get',
+                headers: {
+                    'Authorization': 'Bearer ' + this.state.token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                data: null
+            });
+            return commit('setGroup', resp);
+        },
         async userChat({commit}, id) {
             const resp = await axios({
                 url: 'http://chat-app.test/api/message/user-chat',
@@ -39,16 +53,30 @@ export default {
             console.log(resp)
             return commit('setChat', resp);
         },
-        async sendMessage({commit}, message) {
+        async groupChat({commit}, id) {
             const resp = await axios({
-                url: 'http://chat-app.test/api/message',
+                url: 'http://chat-app.test/api/message/group-chat',
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + this.state.token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                params: id
+            });
+            console.log(resp)
+            return commit('setChat', resp);
+        },
+        async sendMessage({commit}, data) {
+            const resp = await axios({
+                url: data[1],
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + this.state.token,
                     'Accept': 'application/json',
                     'Content-Type': 'multipart/form-data'
                 },
-                data: message
+                data: data[0]
             });
             commit('updateChat', resp);
             return true
@@ -72,6 +100,9 @@ export default {
         set(state, users) {
             state.friends = users.data;
         },
+        setGroup(state, groups) {
+            state.groups = groups.data;
+        },
         setChat(state, chat) {
             state.userChat = chat.data.reverse();
         },
@@ -79,7 +110,6 @@ export default {
             state.userChat.push(message.data)
         },
         setSearchUsers(state, data) {
-            console.log(data)
             state.searchedUsers = data;
         }
     }
